@@ -15,7 +15,7 @@ import java.util.Collection;
 public class StudentService {
 
     @Autowired
-    @Qualifier("fake_dao") /*在实现接口上指定*/
+    @Qualifier("mysql_dao") /*在实现接口上指定*/
     private StudentDao studentDao;
 
     public Collection<Student> getAllStudents(){
