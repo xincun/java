@@ -15,31 +15,27 @@ import java.util.List;
 /**
  * Created by jdzfjfhnui on 2017-9-23.
  */
-@Repository
-@Qualifier("mysql_dao")
-public class MysqlStudentDaoImpl implements StudentDao {
+@Repository @Qualifier("mysql_dao") public class MysqlStudentDaoImpl implements StudentDao {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    private static class StudentRowMapper implements RowMapper<Student>{
+    @Autowired private JdbcTemplate jdbcTemplate;
+    private static class StudentRowMapper implements RowMapper<Student> {
 
         @Override public Student mapRow(ResultSet resultSet, int i) throws SQLException {
             Student student = new Student();
             student.setId(resultSet.getInt("id"));
             student.setName(resultSet.getString("name"));
             student.setCourse(resultSet.getString("course"));
-            return student;        }
+            return student;
+        }
     }
 
-    @Override public Collection<Student> getAllStudents()
-    {
-        List<Student> studentList = jdbcTemplate.query("SELECT id, name, course FROM students", new StudentRowMapper());
+    @Override public Collection<Student> getAllStudents() {
+        List<Student> studentList =
+            jdbcTemplate.query("SELECT id, name, course FROM students", new StudentRowMapper());
         return studentList;
     }
 
-    @Override public Student getStudentById(int id)
-    {
+    @Override public Student getStudentById(int id) {
         final String sql = "SELECT id, name, course FROM students WHERE id=?";
         Student student = jdbcTemplate.queryForObject(sql, new StudentRowMapper(), id);
         return student;
@@ -54,13 +50,13 @@ public class MysqlStudentDaoImpl implements StudentDao {
     @Override public void updateStudent(Student student) {
         final String sql = "UPDATE students SET name=?, course=?  WHERE id=?";
         //多个参数用数组
-        jdbcTemplate.update(sql, new Object[]{ student.getName(), student.getCourse(), student.getId() });
+        jdbcTemplate
+            .update(sql, new Object[] {student.getName(), student.getCourse(), student.getId()});
     }
 
     @Override public void insertStudent(Student student) {
 
         final String sql = "INSERT INTO  students(name, course) VALUES(?,?)";
-        jdbcTemplate.update(sql, new Object[]{student.getName(), student.getCourse()})
-        ;
+        jdbcTemplate.update(sql, new Object[] {student.getName(), student.getCourse()});
     }
 }
